@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BUILD AUTOMATION", "BUILD AUTOMATION.csproj", "{8EF45B80-8B78-8EB3-6CB2-EC99034E91E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BUILD AUTOMATION.Editor", "BUILD AUTOMATION.Editor.csproj", "{D97F8A37-EAB6-F484-F2FF-8E716631B20F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EF45B80-8B78-8EB3-6CB2-EC99034E91E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EF45B80-8B78-8EB3-6CB2-EC99034E91E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EF45B80-8B78-8EB3-6CB2-EC99034E91E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EF45B80-8B78-8EB3-6CB2-EC99034E91E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D97F8A37-EAB6-F484-F2FF-8E716631B20F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D97F8A37-EAB6-F484-F2FF-8E716631B20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D97F8A37-EAB6-F484-F2FF-8E716631B20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D97F8A37-EAB6-F484-F2FF-8E716631B20F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
