@@ -5,10 +5,10 @@ using UnityEditor;
 
 public class ArthurBuildWindow : EditorWindow
 {
-    bool VR,Viewer;
+    bool GameLobby,GameServer,AdventureServer,GameClient;
     bool GuestVR, GuestViewer;
 
-    [MenuItem("Arthur/Build Panel")]
+    [MenuItem("Build/Build Panel")]
     public static void ShowWindow()
     {
         EditorWindow.GetWindow(typeof(ArthurBuildWindow));
@@ -17,19 +17,20 @@ public class ArthurBuildWindow : EditorWindow
     void OnGUI()
     {
         // The actual window code goes here
-        GUILayout.Label("Arthur Build Panel", EditorStyles.boldLabel);
+        GUILayout.Label("Game Build Panel", EditorStyles.boldLabel);
 
-        VR = EditorGUILayout.Toggle("Arthur VR", VR);
+        GameLobby = EditorGUILayout.Toggle("GameLobby", GameLobby);
 
-        Viewer = EditorGUILayout.Toggle("Arthur Viewer", Viewer);
+        GameServer = EditorGUILayout.Toggle("GameServer", GameServer);
 
-        GuestVR = EditorGUILayout.Toggle("Guest VR", GuestVR);
+        AdventureServer = EditorGUILayout.Toggle("AdventureServer", AdventureServer);
 
-        GuestViewer = EditorGUILayout.Toggle("Guest Viewer", GuestViewer);
+        GameClient = EditorGUILayout.Toggle("GameClient", GameClient);
+
         GUILayout.Space(30);
         if (GUILayout.Button("Build"))
         {
-            BuildAutomation.BuildAllWindowsStandaloneUsingEditor(VR, Viewer, GuestVR, GuestViewer);
+            BuildAutomation.BuildAllWindowsStandaloneUsingEditor(GameLobby, GameServer, AdventureServer,GameClient);
 
         }
     }

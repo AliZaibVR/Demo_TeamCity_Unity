@@ -7,34 +7,34 @@ using System;
 using System.IO;
 
 public class BuildAutomation {
-    static ArthurBuildConfiguration arthurBuildHelper = new ArthurBuildConfiguration();
+    static GameBuildConfiguration arthurBuildHelper = new GameBuildConfiguration();
 
-    public static void BuildAllWindowsStandaloneUsingEditor(bool VR,bool Viewer,bool GuestVR, bool GuestViewer)
+    public static void BuildAllWindowsStandaloneUsingEditor(bool gameLobby,bool gameServer,bool adventureServer,bool gameClient)
     {
         bool locationFlag = true;
         bool returnStatus = true;
-        if (Viewer)
+        if (gameLobby)
         {
-            arthurBuildHelper.setConfig(ArthurClient.Develop, ArthurVRMode.ViewerMode, ArthurBuildMode.Standard, locationFlag);
+            arthurBuildHelper.setConfig(GameBuildType.GameLobby, locationFlag);
             returnStatus = arthurBuildHelper.BuildPlayer();
             locationFlag = false;
         }
         
-        if (VR && returnStatus == true)
+        if (gameServer && returnStatus == true)
         {
-            arthurBuildHelper.setConfig(ArthurClient.Develop, ArthurVRMode.VRMode, ArthurBuildMode.Standard, locationFlag);
+            arthurBuildHelper.setConfig(GameBuildType.GameServer, locationFlag);
             returnStatus = arthurBuildHelper.BuildPlayer();
             locationFlag = false;
         }
-        if (GuestViewer && returnStatus == true)
+        if (adventureServer && returnStatus == true)
         {
-            arthurBuildHelper.setConfig(ArthurClient.Develop, ArthurVRMode.ViewerMode, ArthurBuildMode.Guest, locationFlag);
+            arthurBuildHelper.setConfig(GameBuildType.AdventureServer, locationFlag);
             returnStatus = arthurBuildHelper.BuildPlayer();
             locationFlag = false;
         }
-        if (GuestVR && returnStatus == true)
+        if (gameClient && returnStatus == true)
         {
-            arthurBuildHelper.setConfig(ArthurClient.Develop, ArthurVRMode.VRMode, ArthurBuildMode.Guest, locationFlag);
+            arthurBuildHelper.setConfig(GameBuildType.GameClient, locationFlag);
             returnStatus = arthurBuildHelper.BuildPlayer();
             locationFlag = false;
         }
@@ -55,11 +55,9 @@ public class BuildAutomation {
         }
         var configStr = GetArg("-buildConfig");
         var strList = configStr.Split('-');
-        var cl = (ArthurClient) Enum.Parse(typeof(ArthurClient) ,strList[0]);
-        var vMode = (ArthurVRMode) Enum.Parse(typeof(ArthurVRMode), strList[1]);
-        var bMode = (ArthurBuildMode) Enum.Parse(typeof(ArthurBuildMode), strList[2]);
+        var buildType = (GameBuildType) Enum.Parse(typeof(GameBuildType) ,strList[0]);
         
-        arthurBuildHelper.setConfig(cl,vMode,bMode,outputDir);
+        arthurBuildHelper.setConfig(buildType, outputDir);
         arthurBuildHelper.BuildPlayer();
     }
     private static string GetArg(string name)
@@ -74,9 +72,9 @@ public class BuildAutomation {
         }
         return null;
     }
-    static ArthurConfiguration getBuildConfiguration(string args)
+    static GameConfiguration getBuildConfiguration(string args)
     {
-        var config = new ArthurConfiguration();
+        var config = new GameConfiguration();
         var configParam = args.Split('-');
 
         return config;

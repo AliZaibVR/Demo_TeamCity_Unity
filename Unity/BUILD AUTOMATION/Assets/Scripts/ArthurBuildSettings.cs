@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "ArthurBuildSettings", menuName = "Arthur Build Settings", order = 1)]
-public class ArthurBuildSettings : ScriptableObject
+[CreateAssetMenu(fileName = "GameBuildSettings", menuName = "Game Build Settings", order = 1)]
+public class GameBuildSettings : ScriptableObject
 {
-    public bool isGuest;
-    public bool isViewer;
+    public GameBuildType gameRegion;
+
+}
+public enum GameBuildType
+{
+    GameLobby,
+    GameServer,
+    AdventureServer,
+    GameClient
 }

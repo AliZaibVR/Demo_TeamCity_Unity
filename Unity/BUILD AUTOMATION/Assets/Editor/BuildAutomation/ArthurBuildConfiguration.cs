@@ -6,18 +6,18 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ArthurBuildConfiguration
+public class GameBuildConfiguration
 {
-    ArthurConfiguration config;
+    GameConfiguration config;
     bool browseBuildLocationFlag;
     string path;
     
-    public ArthurBuildConfiguration()
+    public GameBuildConfiguration()
     {
-        Config = new ArthurConfiguration();
+        Config = new GameConfiguration();
     }
 
-    public ArthurConfiguration Config
+    public GameConfiguration Config
     {
         get
         {
@@ -28,22 +28,19 @@ public class ArthurBuildConfiguration
             config = value;
         }
     }
-    public void setConfig(ArthurClient cl, ArthurVRMode vrMode, ArthurBuildMode bMode, string buildPath)
+    public void setConfig(GameBuildType build, string buildPath)
     {
-        config.client = cl;
-        config.vrMode = vrMode;
-        config.buildMode = bMode;
+        config.buildType = build;
+        
         browseBuildLocationFlag = false;
         path = buildPath;
         config.buildFileName = "";
     }
-    public void setConfig(ArthurClient cl,ArthurVRMode vrMode,ArthurBuildMode bMode,bool BrowseBuildLocation)
+    public void setConfig(GameBuildType buildType,bool BrowseBuildLocation)
     {
-        config.client = cl;
-        config.vrMode = vrMode;
-        config.buildMode = bMode;
         browseBuildLocationFlag = BrowseBuildLocation;
         config.buildFileName = "";
+        config.buildType = buildType;
     }
     public virtual bool BuildPlayer()
     {
@@ -60,85 +57,68 @@ public class ArthurBuildConfiguration
                 return false;
         }
 
-    //   Debug.Log("path: " + path );
-
-
-        switch (config.client)
+        var sceneName = "";// SceneManager.GetSceneByName("GuestBrowser").path;
+        //   Debug.Log("path: " + path );
+        switch (config.buildType) 
         {
-            case ArthurClient.Acciluim:
+            case GameBuildType.GameLobby:
+
+                foreach (var x in EditorBuildSettings.scenes)
+                {
+                    if (x.path.Contains("GameLobby"))
+                        sceneName = x.path;
+                }
+                Debug.Log("SceneName: " + sceneName);
+                config.buildFileName += "/GameLobby/GameLobby.exe";
+
                 break;
-            case ArthurClient.Boost:
+
+            case GameBuildType.GameServer:
+
+                foreach (var x in EditorBuildSettings.scenes)
+                {
+                    if (x.path.Contains("GameServer"))
+                        sceneName = x.path;
+                }
+                Debug.Log("SceneName: " + sceneName);
+                config.buildFileName += "/GameServer/GameServer.exe";
+
+
                 break;
-            case ArthurClient.Develop:
+            case GameBuildType.AdventureServer:
+
+                foreach (var x in EditorBuildSettings.scenes)
+                {
+                    if (x.path.Contains("AdventureServer"))
+                        sceneName = x.path;
+                }
+                Debug.Log("SceneName: " + sceneName);
+                config.buildFileName += "/AdventureServer/AdventureServer.exe";
+
+
                 break;
-            case ArthurClient.NextVR:
+
+            case GameBuildType.GameClient:
+
+                foreach (var x in EditorBuildSettings.scenes)
+                {
+                    if (x.path.Contains("GameClient"))
+                        sceneName = x.path;
+                }
+                Debug.Log("SceneName: " + sceneName);
+                config.buildFileName += "/GameClient/GameClient.exe";
+
                 break;
+
         }
-
-        var guestSceneName = "";// SceneManager.GetSceneByName("GuestBrowser").path;
-        var mainSceneName = "";// SceneManager.GetSceneByName("MainScene").path;
-        foreach(var x in EditorBuildSettings.scenes)
-        {
-            if (x.path.Contains("GuestBrowser"))
-                guestSceneName = x.path;
-            if (x.path.Contains("MainScene"))
-                mainSceneName = x.path;
-        }
-//        Debug.Log("GuestSceneName: " + guestSceneName);
-//        Debug.Log("Mainscene: " + mainSceneName);
-
-
 
         var scenesList = new List<string>();
-        if (config.buildMode == ArthurBuildMode.Guest)
+        
+        if (!string.IsNullOrEmpty(sceneName))
         {
-            //
-            if (!string.IsNullOrEmpty(guestSceneName) && !string.IsNullOrEmpty(mainSceneName))
-            {
-                scenesList.Add(guestSceneName);
-                scenesList.Add(mainSceneName);
-            }
-            
-
-            if (config.vrMode == ArthurVRMode.VRMode)
-            {
-                PlayerSettings.virtualRealitySupported = true;
-                ArthurUtilities.ArthurBuildSettings.isGuest = true;
-                ArthurUtilities.ArthurBuildSettings.isViewer = false;
-                config.buildFileName += "/ArthurGuestVR/ArthurVR-Guest Edition.exe";
-            }
-            else
-            {
-                PlayerSettings.virtualRealitySupported = false;
-                ArthurUtilities.ArthurBuildSettings.isGuest = true;
-                ArthurUtilities.ArthurBuildSettings.isViewer = true;
-                config.buildFileName += "/ArthurGuestViewer/ArthurViewer-Guest Edition.exe";
-            }
+            scenesList.Add(sceneName);
         }
-        else
-        {
-            if (!string.IsNullOrEmpty(mainSceneName))
-            {
-                scenesList.Add(mainSceneName);
-            }
-            if (config.vrMode == ArthurVRMode.VRMode)
-            {
-                PlayerSettings.virtualRealitySupported = true;
-                ArthurUtilities.ArthurBuildSettings.isGuest = false;
-                ArthurUtilities.ArthurBuildSettings.isViewer = false;
-                config.buildFileName += "/ArthurVR/ArthurVR.exe";
-            }
-            else
-            {
-                PlayerSettings.virtualRealitySupported = false;
-                ArthurUtilities.ArthurBuildSettings.isGuest = false;
-                ArthurUtilities.ArthurBuildSettings.isViewer = true;
-                config.buildFileName += "/ArthurViewer/ArthurViewer.exe";
-            }
-        }
-
         var scenes = new string[scenesList.Count];
-        Debug.Log("Scene List: "+ scenesList.Count);
 
         for (int i = 0; i < scenesList.Count; i++)
         {
@@ -151,9 +131,8 @@ public class ArthurBuildConfiguration
         QualitySettings.SetQualityLevel((int)QualityLevel.Fantastic);
         // Build player.
         Debug.Log("BuildPath: "+ path);
-        Debug.Log("Quality Settings: " + QualitySettings.GetQualityLevel());
-        var error =  BuildPipeline.BuildPlayer(scenes, path + config.buildFileName , BuildTarget.StandaloneWindows64, BuildOptions.None);
-        Debug.Log("BuildPlayer: EndBuilding: "+ error);
+        var error = BuildPipeline.BuildPlayer(scenes, path + config.buildFileName, BuildTarget.StandaloneWindows64, BuildOptions.None);
+        Debug.Log("BuildPlayer: EndBuilding: " + error);
         if (string.IsNullOrEmpty(error))
             return true;
         else
@@ -162,29 +141,9 @@ public class ArthurBuildConfiguration
 }
 
 
-public class ArthurConfiguration
+public class GameConfiguration
 {
-    public ArthurClient client;
-    public ArthurVRMode vrMode;
-    public ArthurBuildMode buildMode;
+    public GameBuildType buildType;
     public string buildFileName;
 
 }
-public enum ArthurClient
-{
-    Boost,
-    Acciluim,
-    Develop,
-    NextVR
-}
-public enum ArthurVRMode
-{
-    VRMode,
-    ViewerMode
-}
-public enum ArthurBuildMode
-{
-    Standard,
-    Guest
-}
-
